@@ -1,0 +1,20 @@
+{
+  "name": "kolega-code-loop-engineering",
+  "version": "0.1.0",
+  "description": "Autonomous loop engineering with parallel sub-agents, state management, and strict keep-or-revert rules. Two loops: New Code (Generator → Verifier) and Bug Fix (Reproduce → Act → Check → Adapt).",
+  "author": {
+    "name": "KLG Tech Innovations Limited"
+  },
+  "keywords": [
+    "loop",
+    "autonomous",
+    "engineering",
+    "generator",
+    "verifier",
+    "qa",
+    "sub-agent",
+    "parallel",
+    "keep-or-revert",
+    "test-driven"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "task_id": "sample-issue-42",
+  "loop_type": "new-code",
+  "attempts_made": 1,
+  "max_attempts": 3,
+  "last_green_commit": null,
+  "last_green_backup": null,
+  "history": [
+    {
+      "attempt": 1,
+      "phase": "generate",
+      "status": "kept",
+      "sub_agent_ids": ["gen-1", "ver-1"],
+      "summary": "Implemented calculator module with add/subtract/multiply/divide. 16/16 tests pass.",
+      "timestamp": "2026-07-14T10:30:00Z"
+    }
+  ],
+  "anti_patterns": [
+    {
+      "pattern": "zero-div-empty-string",
+      "root_cause": "No input validation before arithmetic operation",
+      "file": "src/calc.py",
+      "line": 42,
+      "prevention_rule": "Validate inputs before arithmetic operations",
+      "first_seen": "2026-07-14T11:00:00Z",
+      "occurrence_count": 1
+    }
+  ]
+}

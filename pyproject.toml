@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=64.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kolega-loop-state"
+version = "0.1.0"
+description = "State management for Kolega Code autonomous loop engineering"
+requires-python = ">=3.10"
+dependencies = ["click>=8.0"]
+
+[project.scripts]
+loop-state = "kolega_loop_state.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

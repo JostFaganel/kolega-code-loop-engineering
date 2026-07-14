@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+
+# IDE
+.vscode/
+.idea/
+
+# Loop state (generated at runtime — root only)
+/work-log.json
+/.loop-backup-*/
+
+# OS
+.DS_Store
+Thumbs.db

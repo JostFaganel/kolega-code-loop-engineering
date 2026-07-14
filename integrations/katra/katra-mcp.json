@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "katra-agentic-memory": {
+      "command": "npx",
+      "args": ["-y", "@katra/mcp-server"],
+      "env": {
+        "KATRA_API_KEY": "${KATRA_API_KEY}",
+        "KATRA_BASE_URL": "http://localhost:3112"
+      }
+    }
+  }
+}

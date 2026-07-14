@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "task_id": null,
+  "loop_type": null,
+  "attempts_made": 0,
+  "max_attempts": 3,
+  "last_green_commit": null,
+  "last_green_backup": null,
+  "history": [],
+  "anti_patterns": []
+}
