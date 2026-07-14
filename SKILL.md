@@ -87,9 +87,10 @@ in your handback message.
 
 ## OPTIONAL: KATRA MEMORY INTEGRATION
 
-If Katra MCP tools (`katra_store_memory`, `katra_search_memory`) are
-available and you have been instructed to use persistent memory, read
-`integrations/katra/SKILL.md` after each loop iteration to sync state.
+If Katra MCP tools (`mcp__katra__store_memory`, `mcp__katra__search_memories`)
+are available and you have been instructed to use persistent memory, read
+`${CLAUDE_PLUGIN_ROOT}/integrations/katra/SKILL.md` after each loop
+iteration to sync state.
 
 Otherwise, ignore Katra entirely — the loops work standalone.
 

@@ -280,9 +280,10 @@ Regression Suite:
 
 ### Optional Katra sync
 
-If Katra MCP tools are available, read `integrations/katra/SKILL.md` and
-follow the post-loop sync instructions. This is especially valuable for
-anti-patterns so future loops can avoid repeating the same mistake.
+If Katra MCP tools (`mcp__katra__*`) are available, read
+`${CLAUDE_PLUGIN_ROOT}/integrations/katra/SKILL.md` and follow the
+post-loop sync instructions. This is especially valuable for
+anti-patterns so future loops can avoid repeating mistakes.
 
 ---
 

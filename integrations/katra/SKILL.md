@@ -1,8 +1,24 @@
 # Katra Memory Sync — Post-Loop Instructions
 
 You are reading this because Katra MCP tools are available and you
-have completed a loop iteration. Use Katra to persist the loop state
-so future sessions can benefit from this experience.
+have completed a loop iteration. Use Katra to persist loop state so
+future sessions can benefit from this experience.
+
+## Tool Discovery
+
+Kolega Code exposes Katra tools with the prefix `mcp__katra__`. Run
+this to see available tools:
+
+```
+Search for tools matching "mcp__katra"
+```
+
+Key tools you will use:
+- `mcp__katra__store_memory` — persist a memory
+- `mcp__katra__search_memories` — search past memories
+- `mcp__katra__vector_search` — semantic search
+- `mcp__katra__get_temporal_context` — current session context
+- `mcp__katra__store_journal` — write a journal entry
 
 ---
 
@@ -10,21 +26,23 @@ so future sessions can benefit from this experience.
 
 Store a memory with the loop summary:
 
+Call `mcp__katra__store_memory` with:
+- `content`: The Phase 4 report text (the comprehensive summary)
+- `category`: "insight"
+- `source`: "loop-engineering"
+- `confidence`: 1.0
+- Tags (in content): `[loop-engineering] [success] [<loop-type>]`
+
+Example:
 ```
-Call katra_store_memory with:
-- content: The Phase 4 report text (the comprehensive summary you just printed)
-- tags: ["loop-engineering", "success", "<loop-type>"]
-- metadata: {
-    "task_id": "<task-id>",
-    "attempts": <N>,
-    "files_created": [...],
-    "test_count": <N>,
-    "coverage_pct": <X>
-  }
+mcp__katra__store_memory(
+  content: "LOOP COMPLETE — New Code Loop. Task: auth-module. 24 tests pass, 87% coverage. Artifacts: src/auth.py, tests/test_auth.py.",
+  category: "insight",
+  source: "loop-engineering"
+)
 ```
 
-This allows future loops to query: "Has anyone built something similar
-to X before?" and retrieve the pattern.
+This allows future loops to query: "Has anyone built something similar?"
 
 ---
 
@@ -32,64 +50,54 @@ to X before?" and retrieve the pattern.
 
 Sync the post-mortem to Katra so it becomes globally searchable:
 
-```
-Call katra_store_memory with:
-- content: <the post-mortem markdown from POSTMORTEM.template.md>
-- tags: ["loop-engineering", "anti-pattern", "<pattern-name>", "<module>"]
-- metadata: {
-    "pattern": "<pattern-name>",
-    "file": "<path>",
-    "line": <N>,
-    "root_cause": "<root cause>",
-    "prevention_rule": "<rule>"
-  }
-```
+Call `mcp__katra__store_memory` with:
+- `content`: The post-mortem markdown from the template
+- `category`: "insight"
+- `source`: "loop-engineering"
+- Tags in content: `[loop-engineering] [anti-pattern] [<pattern-name>]`
 
 ---
 
 ## Before starting a BUG FIX (Phase 1)
 
-Enrich the anti-pattern check with Katra's broader memory:
+Search Katra for past failures in the affected module:
 
-```
-Call katra_search_memory with:
-- query: "anti-pattern <affected-module>"
-- tags: ["anti-pattern"]
-- limit: 5
-```
+Call `mcp__katra__search_memories` with:
+- `query`: "anti-pattern <affected-module> bug fix"
+- `limit`: 5
 
-Merge these results with the local `loop-state check-anti-patterns`
-output before instructing the Refactoring agents.
+Merge results with the local `loop-state check-anti-patterns` output
+before instructing the Refactoring agents.
+
+You can also use `mcp__katra__vector_search` for conceptual matches:
+- `query`: "<bug description>"
+- `limit`: 5
 
 ---
 
 ## On loop ABORT (limit exceeded)
 
-Store the failure report so it can be analyzed later:
+Store the failure report for retrospective analysis:
 
-```
-Call katra_store_memory with:
-- content: <full failure report from all attempts>
-- tags: ["loop-engineering", "abort", "<loop-type>"]
-- metadata: {
-    "task_id": "<task-id>",
-    "attempts_exhausted": true,
-    "all_attempts_failed": true
-  }
-```
+Call `mcp__katra__store_memory` with:
+- `content`: Full failure report from all attempts
+- `category`: "event"
+- `source`: "loop-engineering"
+- Tags in content: `[loop-engineering] [abort] [<loop-type>]`
 
 ---
 
 ## After querying Katra for prior work
 
-When starting a new feature, search Katra for similar past work:
+When starting a new feature, search Katra for similar past successes:
 
-```
-Call katra_search_memory with:
-- query: "<feature description keywords>"
-- tags: ["loop-engineering", "success", "new-code"]
-- limit: 3
-```
+Call `mcp__katra__search_memories` with:
+- `query`: "<feature keywords>"
+- `limit`: 3
 
-If results are found, share the patterns with the Generator agents so
-they can learn from past successes.
+Call `mcp__katra__vector_search` with:
+- `query`: "<feature description>"
+- `limit`: 3
+
+If results are found, share patterns with Generator agents so they
+learn from past successes.

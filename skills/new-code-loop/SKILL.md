@@ -221,8 +221,9 @@ Next: <recommended next task or "None — loop exhausted">
 
 ### Optional Katra sync
 
-If Katra MCP tools are available, read `integrations/katra/SKILL.md`
-and follow the post-loop sync instructions to persist this report.
+If Katra MCP tools (`mcp__katra__*`) are available, read
+`${CLAUDE_PLUGIN_ROOT}/integrations/katra/SKILL.md` and follow the
+post-loop sync instructions to persist this report.
 
 ---
 
