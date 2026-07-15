@@ -31,11 +31,15 @@ if [ -z "$LOOP_REPO" ]; then
 fi
 ```
 
-4. Install the state manager:
+4. Set up the Python environment (the repo is self-contained):
 
 ```bash
-cd "$LOOP_REPO" && pip install -e .
+cd "$LOOP_REPO"
+test -d .venv || python3 -m venv .venv
+.venv/bin/pip install -q -e .
 ```
+
+All state commands use `.venv/bin/loop-state` — nothing installed system-wide.
 
 ## Step B — Classify the request
 

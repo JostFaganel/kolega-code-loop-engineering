@@ -50,12 +50,18 @@ Max attempts: 2
 
 ## Step C — Setup (always run first)
 
-```bash
-cd "${CLAUDE_PLUGIN_ROOT}" && pip install -e .
-```
+The repo is self-contained. Set up the venv if needed:
 
 ```bash
-loop-state status
+cd "${CLAUDE_PLUGIN_ROOT}"
+test -d .venv || python3 -m venv .venv
+.venv/bin/pip install -q -e .
+```
+
+Verify:
+
+```bash
+.venv/bin/loop-state status
 ```
 
 ## The request

@@ -8,20 +8,16 @@
 
 ## BOOTSTRAP
 
-Before anything else, ensure the loop-state tool is available:
+The repo is self-contained. Everything runs from its own `.venv/`.
+If the venv doesn't exist yet, set it up:
 
 ```bash
-pip install -e .
+cd "${CLAUDE_PLUGIN_ROOT:-$(dirname "$(readlink -f "$0")" 2>/dev/null || pwd)}"
+test -d .venv || python3 -m venv .venv
+.venv/bin/pip install -q -e .
 ```
 
-Verify it works:
-
-```bash
-loop-state status
-```
-
-If the command is not found, ensure the package installed correctly and
-that the script entry point is on PATH.
+From now on, use `.venv/bin/loop-state` for all state commands.
 
 ---
 
@@ -74,14 +70,14 @@ in your handback message.
 
 | Command | Purpose |
 |---------|---------|
-| `loop-state init <id> --loop-type <new-code\|bug-fix>` | Start a new task |
-| `loop-state attempt` | Increment counter (exits 2 if limit hit) |
-| `loop-state revert` | Print revert command → pipe to `bash` |
-| `loop-state log --status kept\|reverted --summary "..."` | Record an attempt |
-| `loop-state anti-pattern --pattern "..." --root-cause "..." --file "..." --line N --rule "..."` | Record a lesson |
-| `loop-state check-anti-patterns [--module "..."]` | Query past failures |
-| `loop-state status [--json]` | Print current state |
-| `loop-state backup` | Snapshot working tree |
+| `.venv/bin/loop-state init <id> --loop-type <new-code\|bug-fix>` | Start a new task |
+| `.venv/bin/loop-state attempt` | Increment counter (exits 2 if limit hit) |
+| `.venv/bin/loop-state revert` | Print revert command → pipe to `bash` |
+| `.venv/bin/loop-state log --status kept\|reverted --summary "..."` | Record an attempt |
+| `.venv/bin/loop-state anti-pattern --pattern "..." --root-cause "..." --file "..." --line N --rule "..."` | Record a lesson |
+| `.venv/bin/loop-state check-anti-patterns [--module "..."]` | Query past failures |
+| `.venv/bin/loop-state status [--json]` | Print current state |
+| `.venv/bin/loop-state backup` | Snapshot working tree |
 
 ---
 

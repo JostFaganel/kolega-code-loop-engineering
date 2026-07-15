@@ -23,7 +23,7 @@ If none are clear, **ask the user** before proceeding.
 ### 0.2 Initialize state
 
 ```bash
-loop-state init <bug-id> --loop-type bug-fix
+.venv/bin/loop-state init <bug-id> --loop-type bug-fix
 ```
 
 Replace `<bug-id>` with a short identifier (e.g., `div-by-zero`,
@@ -66,7 +66,7 @@ RULES:
 ### 0.5 Snapshot current state
 
 ```bash
-loop-state backup
+.venv/bin/loop-state backup
 ```
 
 This snapshots the workspace **including the failing reproduction test**
@@ -79,7 +79,7 @@ so revert points contain the bug for the next attempt.
 ### 1.1 Increment the attempt counter
 
 ```bash
-loop-state attempt
+.venv/bin/loop-state attempt
 ```
 
 **If this exits with code 2:** stop immediately. Revert, print the
@@ -90,7 +90,7 @@ failure report, and hand back to the user.
 Before coding, check if this module has a history of failed fixes:
 
 ```bash
-loop-state check-anti-patterns --module <affected-file-or-module>
+.venv/bin/loop-state check-anti-patterns --module <affected-file-or-module>
 ```
 
 Review the output. If any anti-patterns are returned, you MUST mention
@@ -118,7 +118,7 @@ RULES:
 3. Apply the fix. Keep it surgical — the diff should be minimal.
 4. Run the reproduction test to confirm it NOW PASSES.
 5. AVOID THESE KNOWN ANTI-PATTERNS for this module:
-   <paste output of loop-state check-anti-patterns here>
+   <paste output of .venv/bin/loop-state check-anti-patterns here>
 6. Return:
    - BRANCH: <branch name>
    - FILES_CHANGED: <list>
@@ -198,7 +198,7 @@ that passes the bug test but breaks the regression suite is **rejected**.
 4. Record the successful attempt:
 
    ```bash
-   loop-state log --status kept \
+   .venv/bin/loop-state log --status kept \
      --summary "Bug fixed: <root cause>. Fix at <file:line>. Regression suite green." \
      --phase act
    ```
@@ -207,7 +207,7 @@ that passes the bug test but breaks the regression suite is **rejected**.
    `skills/bug-fix-loop/POSTMORTEM.template.md`):
 
    ```bash
-   loop-state anti-pattern \
+   .venv/bin/loop-state anti-pattern \
      --pattern "<short-pattern-name>" \
      --root-cause "<why the bug existed>" \
      --file "<path>" \
@@ -232,13 +232,13 @@ that passes the bug test but breaks the regression suite is **rejected**.
 2. Revert:
 
    ```bash
-   loop-state revert | bash
+   .venv/bin/loop-state revert | bash
    ```
 
 3. Return to Phase 1 with the new strategy incorporated into the
    Refactoring agent prompts.
 
-4. If `loop-state attempt` exits code 2 on the next call: revert,
+4. If `.venv/bin/loop-state attempt` exits code 2 on the next call: revert,
    escalate to user.
 
 ### 3.3 Cleanup after revert

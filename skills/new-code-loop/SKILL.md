@@ -23,7 +23,7 @@ If none of these are clear, **ask the user** before proceeding.
 ### 0.2 Initialize state
 
 ```bash
-loop-state init <feature-name> --loop-type new-code
+.venv/bin/loop-state init <feature-name> --loop-type new-code
 ```
 
 Replace `<feature-name>` with a short, kebab-case identifier (e.g.,
@@ -43,7 +43,7 @@ Read `skills/new-code-loop/CONTRACT.template.md` and create a
 ### 0.4 Snapshot current state
 
 ```bash
-loop-state backup
+.venv/bin/loop-state backup
 ```
 
 This creates a revert point. If all attempts fail, the workspace will
@@ -56,7 +56,7 @@ be restored to this exact state.
 ### 1.1 Increment the attempt counter
 
 ```bash
-loop-state attempt
+.venv/bin/loop-state attempt
 ```
 
 **If this exits with code 2:** stop immediately. Print the failure report
@@ -160,7 +160,7 @@ failed.
 4. Record the success:
 
    ```bash
-   loop-state log --status kept \
+   .venv/bin/loop-state log --status kept \
      --summary "Feature implemented by <branch>. <tests> tests pass, <cov>% coverage." \
      --phase generate
    ```
@@ -172,14 +172,14 @@ failed.
 1. Revert to the last known-good state:
 
    ```bash
-   loop-state revert | bash
+   .venv/bin/loop-state revert | bash
    ```
 
    Verify the workspace is clean.
 
 2. Return to Phase 1 (Generate) for the next attempt.
 
-3. If this was attempt 3 and all failed, `loop-state attempt` will exit
+3. If this was attempt 3 and all failed, `.venv/bin/loop-state attempt` will exit
    with code 2 on the next call — stop and escalate.
 
 ### 3.3 Cleanup after revert

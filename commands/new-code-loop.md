@@ -11,16 +11,18 @@ the instructions in `skills/new-code-loop/SKILL.md`.
 
 ## Setup
 
-First, ensure the state manager is installed:
+The repo is self-contained. Set up the venv if needed:
 
 ```bash
-cd "${CLAUDE_PLUGIN_ROOT}" && pip install -e .
+cd "${CLAUDE_PLUGIN_ROOT}"
+test -d .venv || python3 -m venv .venv
+.venv/bin/pip install -q -e .
 ```
 
 Verify:
 
 ```bash
-loop-state status
+.venv/bin/loop-state status
 ```
 
 ## Start the loop
