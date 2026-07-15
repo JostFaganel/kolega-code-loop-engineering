@@ -11,18 +11,45 @@ Continue, or any harness that supports SKILL.md + Task tool.
 
 ## Quickstart
 
+### Option A: Drop-in (recommended)
+
+Install into any project with one command:
+
 ```bash
-git clone https://github.com/kolegadev/kolega-code-loop-engineering.git
+git clone https://github.com/JostFaganel/kolega-code-loop-engineering.git
+cd my-project
+../kolega-code-loop-engineering/install.sh
+```
+
+That's it. Open Kolega Code in `my-project` and type:
+
+```
+/loop Build a calculator module with add, subtract, multiply, divide
+```
+
+The agent auto-detects it's a feature → runs the New Code Loop with
+parallel Generator/Verifier sub-agents.
+
+### Option B: Install as a Kolega Code plugin
+
+```bash
+git clone https://github.com/JostFaganel/kolega-code-loop-engineering.git
+ln -sf $(pwd)/kolega-code-loop-engineering ~/.claude/plugins/kolega-code-loop-engineering
+```
+
+Works across all projects globally.
+
+### Option C: Manual
+
+```bash
+git clone https://github.com/JostFaganel/kolega-code-loop-engineering.git
 cd kolega-code-loop-engineering
 pip install -e .
 ```
 
-Then point your coding harness at this repo and say:
+Then point Kolega Code at the repo and say:
 
-> "Follow SKILL.md. I need a calculator module: add, subtract, multiply, divide."
-
-The agent will read the instructions, install the state manager, and execute
-the autonomous loop with parallel Generator/Verifier sub-agents.
+> "Follow SKILL.md. Build a calculator module."
 
 ---
 
