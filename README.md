@@ -86,8 +86,8 @@ Then point Kolega Code at the repo and say:
 | | New Code Loop | Bug Fix Loop |
 |---|---|---|
 | **Trigger** | New feature request | Bug report / issue |
-| **Phases** | Goal → Generate → Verify → Select | Reproduce → Act → Check → Adapt |
-| **Sub-agents** | Generator (2-3) + Verifier (1 per branch) | QA (1-2) + Refactoring (1-2) + Auditor (1 per fix) + Adapt |
+| **Phases** | Goal → Generate → Verify → Select | Reproduce → Investigate → Act → Check → Adapt |
+| **Sub-agents** | Generator (2-3) + Verifier (1 per branch) | QA (1-2) + Investigator (2) + Refactoring (1-2) + Auditor (1 per fix) + Adapt |
 | **Max attempts** | 3 | 2 |
 | **Revert on** | All verifiers fail | Any fix causes regression |
 | **Memory** | CONTRACT.md per task | Anti-pattern log per module |

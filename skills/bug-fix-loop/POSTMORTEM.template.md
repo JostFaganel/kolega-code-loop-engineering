@@ -3,6 +3,13 @@
 ## Root Cause
 <Why the bug existed — what assumption, logic error, or missing guard caused it>
 
+## Investigation Findings
+- Investigation scope: <NEIGHBORHOOD | SYSTEM>
+- System understanding (Pass 1) accuracy: <accurate | partial | missed>
+- Hypothesis chosen by Refactoring agent: <which of the 2-3 hypotheses>
+- Hypothesis accuracy: <did the chosen hypothesis match the actual fix? yes | partial | no>
+- Unexpected root causes explored: <were any alternative causes valid? none | yes: <which>>
+
 ## File & Line
 - File: <path>
 - Line: <number>
