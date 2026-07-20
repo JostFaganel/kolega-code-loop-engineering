@@ -8,7 +8,11 @@
 
 ## Executive Summary
 
-Kolega Code already has the building blocks needed for a built-in bug-fix loop with broad investigation:
+Kolega Code already has the building blocks needed for a built-in bug-fix loop with broad investigation.
+
+**The user types "fix the login crash" and the agent automatically runs the full REPRODUCE → INVESTIGATE → ACT → CHECK → ADAPT workflow.** No install, no slash command required. The coder agent detects bug-fix keywords, reads the built-in skill, dispatches investigation sub-agents to explore broadly, generates multiple fix hypotheses, and only then attempts a fix. If the first attempt fails, the investigation re-runs with broader SYSTEM scope.
+
+This report covers: how the UX works, whether the `loop-state` CLI is still needed, and the technical integration layers.
 
 | Building block | Already exists in kolega-code | What's missing |
 |---------------|-------------------------------|----------------|
@@ -22,6 +26,102 @@ Kolega Code already has the building blocks needed for a built-in bug-fix loop w
 | Agent types | Coder, Investigation, Browser, General, Planning | None — existing types are sufficient |
 
 **The integration requires no new agent types, no new primitives, and no architectural changes.** The enhancement is purely in prompts, skills, and workflow patterns.
+
+---
+
+## User Experience: How Users Trigger the Bug-Fix Loop
+
+### Default behavior: keyword auto-detection (no slash command needed)
+
+The most natural UX: the user just describes the bug and the agent handles it.
+
+```
+User:  "the login endpoint returns 500 when the password has special characters"
+       "fix the payment rounding — it's off by one cent for amounts over $1000"
+       "there's a crash in the CSV parser when the file is empty"
+
+→ Coder agent reads its skill catalog
+→ Sees the bug-fix-loop skill with trigger_keywords: [fix, bug, crash, error, broken,
+  regression, not working, debug, repair, patch, resolve, incorrect, wrong, fails]
+→ One or more keywords match → activates the skill
+→ Follows REPRODUCE → INVESTIGATE → ACT → CHECK → ADAPT → REPORT workflow
+→ Dispatches investigation sub-agents, coding sub-agents, auditor sub-agents
+→ Returns comprehensive fix report
+```
+
+The user never types `/loop` or `/bug-fix`. They just describe the problem and the agent knows what to do. This is how skills currently work in kolega-code — the skill catalog is injected into the coder agent's prompt as a PromptExtension, and the agent decides when to use each skill.
+
+### Explicit invocation: slash command (like `/loop` today)
+
+For users who want to be explicit or when the task is ambiguous:
+
+```
+User:  /bug-fix the login endpoint returns 500
+
+→ Invokes the skill explicitly via slash command
+→ Same behavior as auto-detection, but forced
+```
+
+Skills in kolega-code automatically become slash commands: a skill at `.agents/skills/bug-fix/SKILL.md` is available as `/bug-fix <args>`. An auto-router skill (`/loop`) could also exist:
+
+```
+User:  /loop fix the login endpoint returns 500     → routes to bug-fix loop
+       /loop build a calculator module               → routes to new-code loop
+```
+
+This mirrors the `commands/loop.md` auto-router from kolega-code-loop-engineering.
+
+### Comparison to your plugin
+
+| Your plugin today | Kolega Code equivalent |
+|-------------------|----------------------|
+| `/loop fix <bug>` | `/bug-fix <bug>` or just "fix the login crash" (auto-detect) |
+| `/loop build <feature>` | `/new-code <feature>` or just "build a calculator" (auto-detect) |
+| `commands/loop.md` (auto-router) | Skill with `trigger_keywords` — agent auto-detects and activates |
+| `SKILL.md` (orchestrator follows phases) | Coder agent reads skill body, dispatches sub-agents at each phase |
+| Install via `install.sh` | No install — built-in skill shipped with kolega-code |
+
+### What the user sees during execution
+
+As the agent runs the loop, the user sees progress in real time:
+
+1. **Phase headers** in the transcript: "🔍 REPRODUCE", "🔬 INVESTIGATE", "🔧 ACT", "✅ CHECK"
+2. **Sub-agent inspector** (`Ctrl+G`): each dispatched investigation, coding, and auditor agent visible with live trajectory
+3. **Progress lines**: "Writing reproduction test...", "Exploring architecture...", "Generating fix hypotheses...", "Verifying fix on branch fix/v1-a..."
+4. **Final report**: comprehensive markdown output with bug ID, investigation findings, fix details, regression results
+
+---
+
+## Do We Need the `loop-state` CLI?
+
+**Short answer: No, not for the core functionality.** But it depends on how rigorous you want the loop enforcement to be.
+
+### What the CLI provides and what kolega-code already has
+
+| CLI feature | Needed in kolega-code? | kolega-code equivalent |
+|-------------|----------------------|----------------------|
+| `loop-state init <id>` | **No** | Task identity tracked in agent context or workflow variables |
+| `loop-state attempt` (exit code 2 at limit) | **Partially** | Agent tracks attempts in its conversation context. Exit code enforcement not replicable, but agent can be instructed to stop after 2 failures. |
+| `loop-state revert` | **No** | Coder agent runs `git checkout main && git branch -D fix/*` directly |
+| `loop-state log --status kept` | **No** | Session journal persists all actions. `/diagnostics` shows session state. |
+| `loop-state anti-pattern` | **No** | kolega-code's project memory (`/memory`) can store anti-patterns persistently |
+| `loop-state check-anti-patterns` | **No** | Agent reads project memory before fixing |
+| `loop-state status` | **No** | `/diagnostics` or agent's own context tracking |
+| `loop-state backup` | **No** | Git operations handled by coder agent; session snapshots available |
+
+### Three levels of rigor
+
+| Level | What it uses | Attempt enforcement | Cross-session memory | Suitable for |
+|-------|-------------|-------------------|---------------------|-------------|
+| **Level 1: Agent context** | Agent tracks state in conversation | Agent instructed to stop after 2 failures (soft) | None | Most bugs, personal use |
+| **Level 2: Project memory** | kolega-code's `/memory` for anti-patterns | Agent instructed + memory file tracks attempt count | Anti-patterns persist across sessions | Team use, recurring bugs |
+| **Level 3: loop-state CLI** | External CLI for deterministic enforcement | Hard exit code at limit, cannot be bypassed | Full work-log with history | CI/CD, automated pipelines, compliance |
+
+### Recommendation for v1
+
+**Skip the CLI.** Ship Layers 1-3 (prompts, skill, Gigacode template) without requiring any additional tooling. The agent's context and kolega-code's built-in memory are sufficient for 95% of bug-fix scenarios. The CLI's main value — deterministic attempt enforcement — matters most in automated/CI contexts, which is a v2 concern.
+
+If users need stronger enforcement later, `kolega-code-loop-engineering` can be installed as a companion package that provides the CLI. The skill can detect whether `loop-state` is available and use it if present, falling back to agent-context tracking otherwise.
 
 ---
 
